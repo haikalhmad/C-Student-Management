@@ -1,6 +1,10 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <limits>
+#include <iomanip>
+#include <algorithm>
+
 using namespace std;
 // Define a class to represent a student
 class Student {
@@ -25,25 +29,33 @@ public:
 void addStudent(vector<Student>& students);
 void modifyStudent(vector<Student>& students);
 void retrieveAllStudents(vector<Student>& students);
-void viewAllStudents(const vector<Student>& students);
+void viewAllStudents(vector<Student>& students);
 void saveToFileSummary(const vector<Student>& students);
 void saveToFileRecord(const vector<Student>& students);
 void saveVectorData(const vector<Student>& students);
 
 int main() {
     vector<Student> students; // Vector to store student records
-
+    retrieveAllStudents(students); // Automatically get the vector data
     int choice;
+
     do {
         cout << "\nStudent Information Management System\n";
         cout << "1. Add a new student record\n";
         cout << "2. Modify a student's record\n";
         cout << "3. View all student records\n";
         cout << "4. Save data to file (Backup your files to avoid overwrite!)\n";
-	cout << "5. Retrieve student data\n";
-        cout << "6. Exit\n";
+	cout << "5. Exit\n";
         cout << "Enter your choice: ";
-        cin >> choice;
+        while(true) {
+	    cin >> choice;
+	    if(cin.fail()) {
+		cout << "Invalid input! Please Re-enter: ";
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+	    } else
+		break;
+	}
 
         switch (choice) {
             case 1:
@@ -60,16 +72,13 @@ int main() {
 		saveToFileRecord(students);
 		saveVectorData(students);
                 break;
-            case 5:
-                retrieveAllStudents(students);
-                break;
-	    case 6:
+	    case 5:
 		cout << "Exiting the program. Goodbye!" << endl;
                 break;
             default:
-                cout << "Invalid choice. Please enter a valid option." << endl;
+                cout << "Invalid choice! Please enter a valid option." << endl;
         }
-    } while (choice != 6);
+    } while (choice != 5);
 
     return 0;
 }
@@ -79,60 +88,156 @@ void addStudent(vector<Student>& students) {
     int id;
     string name;
     double t1, t2, final;
+    cout << endl << "Add New Student Record" << endl;
 
-    cout << "Enter student ID: ";
-    cin >> id;
-    for(auto& student : students) {
-	while(id == student.studentID) {
-	    cout << "ID already exist! Please Re-enter: ";
-	    cin >> id;
+    // Enter student ID
+    cout << "Enter Student ID: ";
+    while(true) {
+	cin >> id;
+	if(cin.fail()) {
+	    //Check to see if input is an integer
+	    cout << "Invalid input! Please enter a valid input: ";
+	    cin.clear(); //clear error state
+	    cin.ignore(numeric_limits<streamsize>::max(), '\n'); //clear input buffer
+	} else {
+	    bool idExist = false;
+	    //If the input is an integer, check if the ID already exist
+	    for(auto& student : students) {
+		if(id == student.studentID) {
+		    idExist = true;
+		    cout << "Student ID already exist! Please Re-enter: ";
+		    break; //Break out of for loop
+		}
+	    }
+	    //If ID does not exist, break out of while loop
+	    if(!idExist)
+		break;
 	}
     }
 
-    cout << "Enter student name: ";
-    cin.ignore();
+    //Enter student name
+    cout << "Enter Student Name: ";
+    cin.ignore(numeric_limits<streamsize>::max(), '\n'); //to avoid getline() from reading '\n' as input
     getline(cin, name);
-    cout << "Enter marks for Test 1: ";
-    cin >> t1;
-    cout << "Enter marks for Test 2: ";
-    cin >> t2;
-    cout << "Enter marks for Final Assessment: ";
-    cin >> final;
+    
+    //Enter Test 1 Marks
+    cout << "Enter Marks for Test 1: ";
+    while(true) {
+	cin >> t1;
+	if(cin.fail()) {
+	    //Check to see if input is a double
+	    cout << "Invalid input! Please enter a valid input: ";
+	    cin.clear();
+	    cin.ignore(numeric_limits<streamsize>::max(), '\n'); //clear input buffer
+	} else
+	    break; //break out of while loop
+    }
 
+    //Enter Test 2 Marks
+    cout << "Enter Marks for Test 2: ";
+    while(true) {
+	cin >> t2;
+	if(cin.fail()) {
+	    cout << "Invalid input! Please enter a valid input: ";
+	    cin.clear();
+	    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+	} else
+	    break; //break out of while loop
+    }
+    
+    //Enter Final Assessment Marks
+    cout << "Enter Marks for Final Assessment: ";
+    while(true) {
+	cin >> final;
+	if(cin.fail()) {
+	    cout << "Invalid input! Please enter a valid input: ";
+	    cin.clear(); //clear error state
+	    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+	} else
+	    break; //break out of while loop
+    }
+    cout << "Student has been added to Record successfully." << endl;
     students.push_back(Student(id, name, t1, t2, final));
 }
 
 // Function to modify a student's record
-void modifyStudent(std::vector<Student>& students) {
-    int studentID;
-    cout << "Enter student ID to modify: ";
-    cin >> studentID;
+void modifyStudent(vector<Student>& students) {
+    int id;
+    cout << endl << "Modify Student Record" << endl;
 
-    for (auto& student : students) {
-        if (student.studentID == studentID) {
-            cout << "Enter new marks for Test 1: ";
-            cin >> student.test1;
-            cout << "Enter new marks for Test 2: ";
-            cin >> student.test2;
-            cout << "Enter new marks for Final Assessment: ";
-            cin >> student.finalAssessment;
-            cout << "Student record modified successfully." << endl;
-            return;
-        }
+    //Enter student id
+    cout << "Enter Student ID: ";
+    while(true) {
+	cin >> id;
+	if(cin.fail()) {
+	    cout << "Invalid input! Please Re-enter: ";
+	    cin.clear();
+	    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+	} else {
+	    for(auto& student : students) {
+		if(id == student.studentID) {
+		    //Enter Test 1 Marks
+		    cout << "Enter Marks for Test 1: ";
+		    while(true) {
+			cin >> student.test1;
+			if(cin.fail()) {
+			    cout << "Invalid input! Please Re-enter: ";
+			    cin.clear();
+			    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			} else
+			    break; //Break inner while loop
+		    }
+		    //Enter Test 2 Marks
+		    cout << "Enter Marks for Test 2: ";
+		    while(true) {
+			cin >> student.test2;
+			if(cin.fail()) {
+			    cout << "Invalid input! Please Re-enter: ";
+			    cin.clear();
+			    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			} else
+			    break; //Break inner while loop
+		    }
+		    //Enter Final Assessment Marks
+		    cout << "Enter Marks for Final Assessment: ";
+		    while(true) {
+			cin >> student.finalAssessment;
+			if(cin.fail()) {
+			    cout << "Invalid input! Please Re-enter: ";
+			    cin.clear();
+			    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			} else
+			    break; //Break inner while loop
+		    }
+		    cout << "Student Record has been modified successsfully." << endl;
+		    return;
+		}
+	    }
+	    break; //break out of while loop
+	}
     }
-
-    cout << "Student not found with ID: " << studentID << endl;
+    cout << "Student ID does not exist." << endl;
 }
 
-void viewAllStudents(const vector<Student>& students) {
-    cout << "Student Records:" << endl;
-    for(const auto& student : students) {
-	cout << "ID: " << student.studentID << endl;
-        cout << "Name: " << student.studentName<< endl;
-        cout << "Test 1: " <<student.test1<< endl;
-        cout << "Test 2: " <<student.test2<< endl;
-        cout << "Final Assessment: " <<student.finalAssessment<< endl;
-        cout << "Total Marks : " <<student.calculateTotalMarks()<< endl;
+void viewAllStudents(vector<Student>& students) {
+    // Sort students based on student IDs
+    sort(students.begin(), students.end(), [](const Student& a, const Student& b) {
+        return a.studentID < b.studentID;
+    });
+
+    cout << endl;
+    cout << setw(4) << "|| Number ||" << setw(14) << "Student ID ||" << setw(16) << "Student Name ||" << setw(10) << "Test 1 ||" << setw(10) << "Test 2 ||" << setw(20) << "Final Assessment ||" << setw(15) << "Total Marks ||" << endl;
+    cout << setw(10) << "--------" << setw(14) << "------------" << setw(16) << "--------------" << setw(10) << "--------" << setw(10) << "--------" << setw(20) << "------------------" << setw(15) << "-------------" << endl;
+
+    for(size_t i = 0; i < students.size(); ++i) {
+        auto& student = students[i];
+        cout << setw(7) << i + 1 << "\t";
+        cout << setw(10) << student.studentID << "\t";
+        cout << setw(12) << student.studentName << "\t";
+        cout << setw(7) << student.test1 << "\t";
+        cout << setw(9) << student.test2 << "\t";
+        cout << setw(8) << student.finalAssessment << "\t";
+        cout << setw(10) << student.calculateTotalMarks() << "\n";
     }
 }
 
@@ -198,14 +303,19 @@ void saveToFileSummary(const vector<Student>& students) {
 void saveToFileRecord(const vector<Student>& students) {
     ofstream outFile("student_record_data.txt");
     if(outFile.is_open()) {
-	for(const auto& student : students) {
-	    outFile << "ID: " << student.studentID << endl;
-	    outFile << "Name: " << student.studentName << endl;
-	    outFile << "Test 1: " << student.test1 << endl;
-	    outFile << "Test 2: " << student.test2 << endl;
-	    outFile << "FInal Assessment: " << student.finalAssessment << endl;
-	    outFile << "Total Marks: " << student.calculateTotalMarks() << endl << endl;
-	}
+	outFile << setw(4) << "|| Number ||" << setw(14) << "Student ID ||" << setw(16) << "Student Name ||" << setw(10) << "Test 1 ||" << setw(10) << "Test 2 ||" << setw(20) << "Final Assessment ||" << setw(15) << "Total Marks ||" << endl;
+    outFile << setw(10) << "--------" << setw(14) << "------------" << setw(16) << "--------------" << setw(10) << "--------" << setw(10) << "--------" << setw(20) << "------------------" << setw(15) << "-------------" << endl;
+        // Append new student data
+        for (size_t i = 0; i < students.size(); ++i) {
+            const Student& student = students[i];
+            outFile << setw(6) << i + 1 << "\t";
+            outFile << setw(10) << student.studentID << "\t";
+            outFile << setw(11) << student.studentName << "\t";
+            outFile << setw(7) << student.test1 << "\t";
+            outFile << setw(9) << student.test2 << "\t";
+            outFile << setw(10) << student.finalAssessment << "\t";
+            outFile << setw(12) << student.calculateTotalMarks() << "\n";
+        }
 	cout << "Student record saved to file successfully." << endl;
 	outFile.close();
     } else {
