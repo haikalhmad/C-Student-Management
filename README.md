@@ -1,5 +1,6 @@
 As a freelance coder, your team is assigned to develop a Student Information Management 
 System. The proposed system should be able to perform the following operations:
+
 1. Add a new student record including student ID, student name, and marks for Test 1, 
 Test 2 and final assessment.
 2. Modify the student's record.
@@ -8,6 +9,7 @@ Test 2 and final assessment.
 i. the total number of students.
 ii. the highest, lowest, and average marks for Test 1 and Test 2 respectively.
 iii. the total marks for all students.
+
 Your proposed system must use a C++ program and it should:
 a) Contain all topics covered in the class (screen input and output, arithmetic operations, 
 control flow, function, array/vector, pointer, structure/class, file processing)
