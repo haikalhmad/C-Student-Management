@@ -5,8 +5,4 @@ System. The proposed system should be able to perform the following operations:
 Test 2 and final assessment.
 2. Modify the student's record.
 3. View all student records with their total mark (Test 1 + Test 2 + Final Assessment).
-4. Save all data into a file that includes a summary of:
-
-i. the total number of students.
-ii. the highest, lowest, and average marks for Test 1 and Test 2 respectively.
-iii. the total marks for all students.
+4. Save all data into a file that includes a summary of: the total number of students, the highest, lowest, and average marks for Test 1 and Test 2 respectively, the total marks for all students.
