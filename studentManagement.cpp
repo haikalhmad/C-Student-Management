@@ -232,8 +232,8 @@ void viewAllStudents(vector<Student>& students) {
     for(size_t i = 0; i < students.size(); ++i) {
         auto& student = students[i];
         cout << setw(7) << i + 1 << "\t";
-        cout << setw(10) << student.studentID << "\t";
-        cout << setw(12) << student.studentName << "\t";
+        cout << setw(12) << student.studentID << "\t";
+        cout << setw(11) << student.studentName << "\t";
         cout << setw(7) << student.test1 << "\t";
         cout << setw(9) << student.test2 << "\t";
         cout << setw(8) << student.finalAssessment << "\t";
@@ -309,12 +309,12 @@ void saveToFileRecord(const vector<Student>& students) {
         for (size_t i = 0; i < students.size(); ++i) {
             const Student& student = students[i];
             outFile << setw(6) << i + 1 << "\t";
-            outFile << setw(10) << student.studentID << "\t";
+            outFile << setw(12) << student.studentID << "\t";
             outFile << setw(11) << student.studentName << "\t";
             outFile << setw(7) << student.test1 << "\t";
             outFile << setw(9) << student.test2 << "\t";
-            outFile << setw(10) << student.finalAssessment << "\t";
-            outFile << setw(12) << student.calculateTotalMarks() << "\n";
+            outFile << setw(9) << student.finalAssessment << "\t";
+            outFile << setw(10) << student.calculateTotalMarks() << "\n";
         }
 	cout << "Student record saved to file successfully." << endl;
 	outFile.close();
